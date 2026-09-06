@@ -1,0 +1,18 @@
+{
+  "name": "Vantage — Equity Research Terminal",
+  "short_name": "Vantage",
+  "description": "Indian equity research terminal: fundamentals, technicals, F&O analytics, and news. Research and analytics only — not a brokerage.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E1013",
+  "theme_color": "#0E1013",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
