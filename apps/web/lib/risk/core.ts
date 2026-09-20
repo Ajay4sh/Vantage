@@ -8,7 +8,7 @@
 // findings. If a change would make a position look more attractive rather than
 // more understood, it does not belong in this file.
 
-import type { TradeLog } from "./store";
+import type { TradeLog } from "../store";
 
 const round2 = (x: number) => Math.round(x * 100) / 100;
 const round1 = (x: number) => Math.round(x * 10) / 10;

@@ -23,6 +23,7 @@ import Fundamentals from "./tabs/Fundamentals";
 import Technicals from "./tabs/Technicals";
 import Options from "./tabs/Options";
 import Risk from "./tabs/Risk";
+import Portfolio from "./tabs/Portfolio";
 import News from "./tabs/News";
 import PulseHome from "./pulse/PulseHome";
 import SimpleWatchlist from "./pulse/SimpleWatchlist";
@@ -52,6 +53,7 @@ const TABS = [
   ["technicals", "Technicals"],
   ["options", "Options"],
   ["risk", "Risk"],
+  ["portfolio", "Portfolio"],
   ["news", "News & sentiment"],
 ] as const;
 
@@ -301,6 +303,7 @@ export default function Terminal() {
         <Options stock={current} analytics={analytics[current.sym]} onSelect={setCurrentSymbol} radarSymbols={watchlist} />
       )}
       {activeTab === "risk" && <Risk stock={current} analytics={analytics[current.sym]} />}
+      {activeTab === "portfolio" && <Portfolio />}
       {activeTab === "news" && <News stock={current} />}
     </>
   );
