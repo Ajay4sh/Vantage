@@ -469,3 +469,162 @@ tr:last-child td { border-bottom: none; }
   .brand-tag { display: none; }
   .live-controls .last-updated { display: none; }
 }
+
+/* ==================================================================
+   UI Concept B — "Bold & Premium" Simple-mode front door.
+   Scoped entirely under .concept-b so the Pro terminal (dark/gold)
+   is untouched. Tokens per UI_CONCEPT_B_IMPLEMENTATION_PROMPT.md.
+   a11y: --text-muted (2.98–4.35:1) is DECORATIVE ONLY — never body
+   text; --text-secondary (6.4–9.3:1) is the readable secondary color.
+   Glow/gradients are structural decoration, never tied to price moves.
+   ================================================================== */
+.concept-b {
+  --bg-gradient: radial-gradient(circle at 20% 0%, #241B3E 0%, #140F24 55%, #0B0815 100%);
+  --accent-gradient: linear-gradient(135deg, #FF6FD8, #8B5CF6);
+  --accent-gradient-alt: linear-gradient(135deg, #8B5CF6, #4F46E5);
+  --glass-bg: rgba(255, 255, 255, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.09);
+  --text-primary: #F2EEFF;
+  --text-secondary: #B7A9E8;
+  --text-muted: #7A6FA0;
+  --positive: #4ADE9C;
+  --negative: #FF7A93;
+  --cb-display: var(--font-manrope), var(--font-display), sans-serif;
+  --cb-data: var(--font-display), var(--font-mono), sans-serif;
+
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--cb-display);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+.concept-b *::-webkit-scrollbar { width: 6px; }
+.concept-b *::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 6px; }
+
+.cb-app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 460px;
+  margin: 0 auto;
+  position: relative;
+}
+.cb-main { flex: 1; overflow-y: auto; padding: 4px 18px 22px; }
+.cb-data { font-family: var(--cb-data); font-variant-numeric: tabular-nums; }
+.cb-pos { color: var(--positive); }
+.cb-neg { color: var(--negative); }
+
+/* Header */
+.cb-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px 8px;
+}
+.cb-greeting { display: flex; flex-direction: column; }
+.cb-greeting .cb-hi { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+.cb-greeting .cb-name { font-size: 20px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.01em; }
+.cb-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 15px;
+  box-shadow: 0 4px 16px rgba(139,92,246,0.4);
+  border: none; cursor: pointer;
+}
+
+/* Glass surfaces */
+.cb-glass {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 22px;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* Pulse hero + glow */
+.cb-hero { position: relative; overflow: hidden; padding: 20px; }
+.cb-hero > * { position: relative; z-index: 1; }
+.cb-pulse-glow {
+  content: ""; position: absolute; z-index: 0;
+  top: -45%; right: -18%; width: 75%; height: 130%;
+  background: radial-gradient(circle, rgba(255,111,216,0.38) 0%, rgba(139,92,246,0.18) 40%, transparent 68%);
+  filter: blur(34px); pointer-events: none;
+}
+.cb-mood-label {
+  font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-secondary); font-weight: 600;
+}
+.cb-mood-word {
+  font-size: 15px; font-weight: 700;
+  background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.cb-headline { margin: 12px 0 0; font-size: 21px; line-height: 1.3; font-weight: 700; color: var(--text-primary); }
+.cb-statrow { display: flex; gap: 10px; margin-top: 16px; }
+.cb-stat {
+  flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+  border-radius: 14px; padding: 10px 12px;
+}
+.cb-stat .cb-stat-name { font-size: 10px; letter-spacing: 0.04em; color: var(--text-secondary); font-weight: 600; }
+.cb-stat .cb-stat-val { font-size: 14px; margin-top: 4px; color: var(--text-primary); }
+
+.cb-section-label {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-secondary); font-weight: 700; margin: 20px 2px 10px;
+}
+
+/* Watchlist card */
+.cb-wcard {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin-bottom: 10px; width: 100%;
+  text-align: left; cursor: pointer; color: inherit;
+}
+.cb-wcard:active { transform: scale(0.99); }
+.cb-badge {
+  width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 15px; color: #fff;
+  background: var(--accent-gradient-alt);
+}
+.cb-wcard-mid { flex: 1; min-width: 0; }
+.cb-wcard-sym { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.cb-wcard-sector { font-size: 12px; color: var(--text-secondary); }
+.cb-wcard-right { text-align: right; flex-shrink: 0; }
+.cb-wcard-price { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.cb-wcard-chg { font-size: 12px; font-weight: 600; }
+
+/* Bottom nav */
+.cb-nav {
+  flex-shrink: 0;
+  display: flex; justify-content: space-around; align-items: center;
+  padding: 8px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--glass-border);
+  background: rgba(11,8,21,0.72);
+  -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
+}
+.cb-nav-item {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  background: none; border: none; cursor: pointer; padding: 6px 12px;
+  color: var(--text-secondary); font-family: var(--cb-display);
+  font-size: 11px; font-weight: 600;
+}
+.cb-nav-item[aria-selected="true"] { color: var(--text-primary); }
+.cb-nav-dot { width: 20px; height: 4px; border-radius: 3px; background: transparent; }
+.cb-nav-item[aria-selected="true"] .cb-nav-dot { background: var(--accent-gradient); }
+
+/* Primary gradient button (CTAs inside Concept B) */
+.cb-btn {
+  width: 100%; padding: 14px; border: none; border-radius: 16px;
+  background: var(--accent-gradient); color: #fff; cursor: pointer;
+  font-family: var(--cb-display); font-weight: 700; font-size: 14px;
+  box-shadow: 0 6px 20px rgba(139,92,246,0.35);
+}
+.cb-btn.secondary { background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--text-primary); box-shadow: none; }
+
+.cb-search {
+  width: 100%; padding: 12px 14px; border-radius: 14px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  color: var(--text-primary); font-family: var(--cb-display); font-size: 14px;
+}
+.cb-search::placeholder { color: var(--text-secondary); }

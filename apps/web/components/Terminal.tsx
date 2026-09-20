@@ -13,7 +13,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import TopBar from "./TopBar";
 import Watchlist from "./Watchlist";
-import SimpleView from "./SimpleView";
 import { useApp } from "./AppProvider";
 import StockHeader from "./StockHeader";
 import ConvictionGauge from "./ConvictionGauge";
@@ -30,6 +29,7 @@ import SimpleWatchlist from "./pulse/SimpleWatchlist";
 import ProfileSurface from "./pulse/ProfileSurface";
 import PulseTransition from "./pulse/PulseTransition";
 import MobileNav, { type Surface } from "./pulse/MobileNav";
+import SimpleApp from "./simple/SimpleApp";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useT } from "@/lib/i18n/react";
 import { DEFAULT_SYMBOL, SAMPLE_STOCKS, SECTORS } from "@/lib/sample-data";
@@ -328,7 +328,22 @@ export default function Terminal() {
     </div>
   );
 
-  // ===== Mobile: sentiment-led front door + app-level nav (Market Pulse) =====
+  // ===== Simple mode: UI Concept B front door (mobile default + desktop Simple) =====
+  // Its own visual world (glass/gradient), scoped under .concept-b; Pro mode
+  // below keeps the dark-terminal aesthetic untouched.
+  if (mode === "simple") {
+    return (
+      <SimpleApp
+        rows={rows}
+        currentSymbol={currentSymbol}
+        onSelect={setCurrentSymbol}
+        onAdd={addSymbol}
+        onExitToPro={() => setMode("pro")}
+      />
+    );
+  }
+
+  // ===== Mobile (Pro): sentiment-led front door + app-level nav (Market Pulse) =====
   if (isMobile) {
     const up = current.chg >= 0;
 
@@ -412,38 +427,31 @@ export default function Terminal() {
     );
   }
 
-  // ===== Desktop =====
+  // ===== Desktop (Pro) — Simple mode is handled above by the Concept B shell =====
   return (
     <>
       {topBar}
 
-      {mode === "simple" ? (
-        <div className="layout-simple">
-          {watchlistEl}
-          <SimpleView stock={current} />
-        </div>
-      ) : (
-        <div className="layout">
-          {watchlistEl}
+      <div className="layout">
+        {watchlistEl}
 
-          <div className="col">
-            <StockHeader stock={current} />
-            <div className="tabs">
-              {TABS.map(([id, label]) => (
-                <div key={id} className={`tab ${activeTab === id ? "active" : ""}`} onClick={() => setActiveTab(id)}>
-                  {label}
-                </div>
-              ))}
-            </div>
-            <div className="tab-panels">{activePanel}</div>
+        <div className="col">
+          <StockHeader stock={current} />
+          <div className="tabs">
+            {TABS.map(([id, label]) => (
+              <div key={id} className={`tab ${activeTab === id ? "active" : ""}`} onClick={() => setActiveTab(id)}>
+                {label}
+              </div>
+            ))}
           </div>
-
-          <div className="col">
-            <ConvictionGauge stock={current} />
-            <ResearchNote key={current.sym} stock={current} analytics={analytics[current.sym]} />
-          </div>
+          <div className="tab-panels">{activePanel}</div>
         </div>
-      )}
+
+        <div className="col">
+          <ConvictionGauge stock={current} />
+          <ResearchNote key={current.sym} stock={current} analytics={analytics[current.sym]} />
+        </div>
+      </div>
     </>
   );
 }

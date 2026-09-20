@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { IBM_Plex_Mono, Inter, Noto_Sans_Devanagari, Space_Grotesk } from "next/font/google";
+import { IBM_Plex_Mono, Inter, Manrope, Noto_Sans_Devanagari, Space_Grotesk } from "next/font/google";
 import AppProvider from "@/components/AppProvider";
 import PwaProvider from "@/components/PwaProvider";
 import "./globals.css";
@@ -20,6 +20,14 @@ const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-mono",
+});
+
+// Concept B (Simple-mode front door) display font. Scoped via the .concept-b
+// tree only — the Pro terminal keeps Space Grotesk / Inter unchanged.
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-manrope",
 });
 
 // Devanagari fallback for Hindi (8.3) — Inter/Space Grotesk don't cover it.
@@ -51,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} ${devanagari.variable}`}
+      className={`${display.variable} ${body.variable} ${mono.variable} ${manrope.variable} ${devanagari.variable}`}
     >
       <body>
         <AppProvider>
