@@ -22,7 +22,9 @@ import Fundamentals from "./tabs/Fundamentals";
 import Technicals from "./tabs/Technicals";
 import Options from "./tabs/Options";
 import Risk from "./tabs/Risk";
+import Strategy from "./tabs/Strategy";
 import Portfolio from "./tabs/Portfolio";
+import Scanners from "./tabs/Scanners";
 import News from "./tabs/News";
 import PulseHome from "./pulse/PulseHome";
 import SimpleWatchlist from "./pulse/SimpleWatchlist";
@@ -52,8 +54,10 @@ const TABS = [
   ["fundamentals", "Fundamentals"],
   ["technicals", "Technicals"],
   ["options", "Options"],
+  ["strategy", "Strategy"],
   ["risk", "Risk"],
   ["portfolio", "Portfolio"],
+  ["scanners", "Scanners"],
   ["news", "News & sentiment"],
 ] as const;
 
@@ -302,8 +306,17 @@ export default function Terminal() {
       {activeTab === "options" && (
         <Options stock={current} analytics={analytics[current.sym]} onSelect={setCurrentSymbol} radarSymbols={watchlist} />
       )}
+      {activeTab === "strategy" && <Strategy stock={current} analytics={analytics[current.sym]} />}
       {activeTab === "risk" && <Risk stock={current} analytics={analytics[current.sym]} />}
       {activeTab === "portfolio" && <Portfolio />}
+      {activeTab === "scanners" && (
+        <Scanners
+          onOpen={(sym) => {
+            addSymbol(sym);
+            setActiveTab("overview");
+          }}
+        />
+      )}
       {activeTab === "news" && <News stock={current} />}
     </>
   );

@@ -1,16 +1,49 @@
 "use client";
 
-import PriceChart from "../charts/PriceChart";
+import { useEffect, useState } from "react";
+import CandleChart from "../charts/CandleChart";
 import MetricTooltip from "../MetricTooltip";
-import type { Stock } from "@/lib/types";
+import type { Candle, Stock } from "@/lib/types";
 
 export default function Technicals({ stock }: { stock: Stock }) {
   const t = stock.technicals;
+  const [candles, setCandles] = useState<Candle[] | null>(null);
+  const [source, setSource] = useState<string>("");
+
+  useEffect(() => {
+    let cancelled = false;
+    setCandles(null);
+    fetch(`/api/candles?symbol=${encodeURIComponent(stock.sym)}`, { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { candles: Candle[]; source: string } | null) => {
+        if (!cancelled && d) {
+          setCandles(d.candles);
+          setSource(d.source);
+        }
+      })
+      .catch(() => !cancelled && setCandles([]));
+    return () => {
+      cancelled = true;
+    };
+  }, [stock.sym]);
+
   return (
     <>
       <div className="card">
-        <div className="card-title">Price action (20 sessions)</div>
-        <PriceChart history={t.priceHistory} sym={stock.sym} />
+        <div className="card-title">Price action — daily candles</div>
+        {candles === null ? (
+          <div style={{ height: 340, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--text-3)", fontSize: 12 }}>
+            Loading chart…
+          </div>
+        ) : (
+          <CandleChart
+            candles={candles}
+            support={t.support}
+            resistance={t.resistance}
+            sym={stock.sym}
+            source={source}
+          />
+        )}
       </div>
       <div className="section-gap grid-3">
         <div className="card">

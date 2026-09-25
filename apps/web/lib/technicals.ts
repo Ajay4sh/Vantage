@@ -28,6 +28,38 @@ export function emaSeries(values: number[], period: number): number[] {
   return out;
 }
 
+/** Simple moving average as a full series aligned to `values`; entries before
+ *  index period-1 are null. For chart overlays (Phase 12 candlestick chart). */
+export function smaSeries(values: number[], period: number): (number | null)[] {
+  return values.map((_, i) => {
+    if (i < period - 1) return null;
+    let s = 0;
+    for (let j = i - period + 1; j <= i; j++) s += values[j];
+    return Math.round((s / period) * 100) / 100;
+  });
+}
+
+export interface BollingerPoint {
+  mid: number | null;
+  upper: number | null;
+  lower: number | null;
+}
+
+/** Bollinger Bands: `mult`-sigma envelope around the `period`-SMA. Population
+ *  standard deviation over the window (the usual convention). Pure; for the
+ *  Phase 12 chart overlay. */
+export function bollingerBands(values: number[], period = 20, mult = 2): BollingerPoint[] {
+  const r2 = (x: number) => Math.round(x * 100) / 100;
+  return values.map((_, i) => {
+    if (i < period - 1) return { mid: null, upper: null, lower: null };
+    const win = values.slice(i - period + 1, i + 1);
+    const mean = win.reduce((a, b) => a + b, 0) / period;
+    const variance = win.reduce((a, b) => a + (b - mean) * (b - mean), 0) / period;
+    const sd = Math.sqrt(variance);
+    return { mid: r2(mean), upper: r2(mean + mult * sd), lower: r2(mean - mult * sd) };
+  });
+}
+
 /** RSI with Wilder's smoothing. Returns a 0-100 integer; 50 when the series
  *  is too short or perfectly flat (no signal either way). */
 export function computeRSI(closes: number[], period = 14): number {
