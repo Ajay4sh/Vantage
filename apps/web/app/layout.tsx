@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, Inter, Manrope, Noto_Sans_Devanagari, Space_Grotesk } fr
 import AppProvider from "@/components/AppProvider";
 import PwaProvider from "@/components/PwaProvider";
 import "./globals.css";
+import "./pro.css";
 
 const display = Space_Grotesk({
   subsets: ["latin"],
